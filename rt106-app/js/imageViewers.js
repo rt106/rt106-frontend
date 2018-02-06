@@ -856,7 +856,9 @@ if (typeof imageViewers === 'undefined') {
 
     // color passed in can be a name or a rgb string
     var colorArray;
-    if (color === "white" || color === "black" || color === "red" || color === "green" || color === "blue") {
+    if (color === undefined) {
+      colorArray = undefined;
+    } else if (color === "white" || color === "black" || color === "red" || color === "green" || color === "blue") {
       colorArray = colorNameToRGBArray(color);
     } else {
       colorArray = RGBStringToRGBArray(color);

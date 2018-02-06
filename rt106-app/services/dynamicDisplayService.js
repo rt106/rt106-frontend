@@ -73,9 +73,9 @@
                       return Promise.reject(error);
                     });
                 });
-          } else if (imageFormat == "tiff16:") {
+          } else if (imageFormat == "tiff16:" || imageFormat == "tiff:") {
             // Just one image, not a stack as in DICOM.
-            $log.log("dynamicDisplayService.renderStackInViewer(), imageFormat is tiff16, trying to load " + accessPath);
+            $log.log("dynamicDisplayService.renderStackInViewer(), imageFormat is " + imageFormat + ", trying to load " + accessPath);
               var pathologyImageString = utilityFns.requestPathologyImageString(imageFormat, accessPath);
               $log.log("pathologyImageString is " + pathologyImageString);
               var imageIds = [];
@@ -117,7 +117,9 @@
      * Display the specifified series in the appropriate image viewer with the given color & opacityValue.
      */
     var displayInCell = function(imageFormat, accessPath, displayStructElement, col, row, shape, color, opacityValue, imageProcessing, detections) {
-      $log.log("dynamicDisplayService.displayInCell, accessPath is " + accessPath + ", col,row is " + col + "," + row + ", shape is " + shape + ", color is " + color + ", opacityValue is " + opacityValue + ", imageProcessing is " + imageProcessing + ", imageFormat is " + imageFormat);
+      //$log.log("dynamicDisplayService.displayInCell, accessPath is " + accessPath + ", col,row is " + col + "," + row + ", shape is " + shape + ", color is " + color +
+      //    ", opacityValue is " + opacityValue + ", imageProcessing is " + imageProcessing + ", imageFormat is " + imageFormat +
+      //    ", displayStructElement is " + JSON.stringify(displayStructElement));
 
       var viewerID = getViewerID(col, row, shape);
       return renderStackInViewer(imageFormat, accessPath, viewerID, displayStructElement, color, opacityValue, imageProcessing, detections)
@@ -224,38 +226,34 @@
           var source = displayStructElement.source;
           var parameter = displayStructElement.parameter;
           var imageFormat = imageFormatDefault;
-          // Handle defaults.
-          var color;
-          var opacity;
-          var imageProcessing;
-          if (displayStructElement.properties === undefined) {
-            color = colorDefault;
-            opacity = opacityDefault;
-            imageProcessing = imageProcessingDefault;
-          } else {
-            if (displayStructElement.properties.color === undefined || displayStructElement.properties.color === "undefined") {
-              color = colorDefault;
-            } else {
-              color = displayStructElement.properties.color;
-            }
-            if (displayStructElement.properties.opacity === undefined) {
-              opacity = opacityDefault;
-            } else {
-              opacity = displayStructElement.properties.opacity;
-            }
-            if (displayStructElement.imageProcessing === undefined || displayStructElement.imageProcessing === "undefined") {
-              imageProcessing = imageProcessingDefault;
-            } else {
-              imageProcessing = displayStructElement.imageProcessing;
-            }
+          // Set properties to defaults, then change if appropriate.
+          var color = colorDefault;
+          var opacity = opacityDefault;
+          var imageProcessing = imageProcessingDefault;
+          // color property for RGB images needs to be undefined to avoid special handling
+          if (displayStructElement.cellType === "pathologyImageRGB") {
+              color = undefined;
+          }
+          if (displayStructElement.properties !== undefined) {
+              if (displayStructElement.cellType !== "pathologyImageRGB" && displayStructElement.properties.color !== undefined && displayStructElement.properties.color !== "undefined") {
+                  color = displayStructElement.properties.color;
+              }
+              if (displayStructElement.properties.opacity !== undefined && displayStructElement.opacity !== "undefined") {
+                  opacity = displayStructElement.properties.opacity;
+              }
+              if (displayStructElement.imageProcessing !== undefined && displayStructElement.imageProcessing !== "undefined") {
+                  imageProcessing = displayStructElement.imageProcessing;
+              }
           }
           $log.log("dynamicDisplayService.displayResult, imageProcessing is " + imageProcessing);
 
-          if (cellType == "image" || cellType == "pathologyImage") {
+          if (cellType == "image" || cellType == "pathologyImage" || cellType == "pathologyImageRGB") {
             if (cellType == "image") {
               imageFormat = "http:";
             } else if (cellType == "pathologyImage") {
               imageFormat = "tiff16:";
+            } else if (cellType == "pathologyImageRGB") {
+              imageFormat = "tiff:";
             }
             // Iterate through execItem.details.
             var parameterValue = "unknown";
