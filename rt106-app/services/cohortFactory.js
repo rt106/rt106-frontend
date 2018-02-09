@@ -26,7 +26,7 @@
 
       var req = {
         method: 'GET',
-        url: Rt106_SERVER_URL + '/v1/datastore/patients',
+        url: utilityFns.rt106_server_url() + '/v1/datastore/patients',
       };
       $log.log('Request ', req);
       $log.log(req.url);
@@ -78,7 +78,7 @@
 
       var req = {
         method: 'GET',
-        url: Rt106_SERVER_URL + '/v1/datastore/patients/' + newpatient.id + '/imaging/studies',
+        url: utilityFns.rt106_server_url() + '/v1/datastore/patients/' + newpatient.id + '/imaging/studies',
       };
 
       $http(req)
@@ -110,7 +110,7 @@
       var deferred = $q.defer();
       var req = {
         method: 'GET',
-        url: Rt106_SERVER_URL + '/v1/datastore/patients/' + patient.id + '/imaging/studies/' + study.id + '/series',
+        url: utilityFns.rt106_server_url() + '/v1/datastore/patients/' + patient.id + '/imaging/studies/' + study.id + '/series',
       };
 
       $http(req)

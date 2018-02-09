@@ -22,7 +22,7 @@
     var pollErrorReported = false;
     this.pollExecList = function(execList, ngScope) {
       var promise = new Promise(function(resolve, reject) {
-        $http.get(Rt106_SERVER_URL + '/v1/executions')
+        $http.get(utilityFns.rt106_server_url() + '/v1/executions')
           .then(function(result) {
             // Weave the newly-queried execution list into execList, but don't just replace the entire thing,
             // because this confuses some AngularJS operations that watches for variables as having changed.
@@ -71,14 +71,14 @@
 
 
     this.initExecution = function() {
-      $http.get(Rt106_SERVER_URL + '/v1/setCookies')
+      $http.get(utilityFns.rt106_server_url() + '/v1/setCookies')
         .then(function(result) {
           // Nothing to do here.  This is just telling the server to set up cookies.
         }, function(err) {
           $log.error("/v1/setCookies returnes an error.", err.data);
           alarmService.displayAlert("Error setting cookies");
         });
-      $http.get(Rt106_SERVER_URL + '/v1/queryExecutionList')
+      $http.get(utilityFns.rt106_server_url() + '/v1/queryExecutionList')
         .then(function(result) {
           // Nothing to do here.  This is just telling the server to set up its execution list from the database.
         }, function(err) {
@@ -179,7 +179,7 @@
         },
         "context": context_data
       };
-      $http.post(Rt106_SERVER_URL + '/v1/execution', http_data)
+      $http.post(utilityFns.rt106_server_url() + '/v1/execution', http_data)
         .then(
           function(response) {
             // success callback
