@@ -13,7 +13,7 @@
 
     'use strict';
 
-    mod.service('alarmService', ['$http', '$log', 'Rt106_SERVER_URL', function($http, $log, Rt106_SERVER_URL) {
+    mod.service('alarmService', ['$http', '$log', 'Rt106_SERVER_URL', 'utilityFns', function($http, $log, Rt106_SERVER_URL, utilityFns) {
 
         var self = this;
 
@@ -38,7 +38,7 @@
             // The line below is just for testing that the alert can be displayed from within this same service.
             //self.displayAlert("Calling scanForHealth() in alarmService");
             // Ask for the list of bad services.
-            $http.get(Rt106_SERVER_URL + '/v1/health/bad')
+            $http.get(utilityFns.rt106_server_url() + '/v1/health/bad')
                 .then(function(result) {
                     var badServices = result.data;
                     if (badServices.length > 0) {

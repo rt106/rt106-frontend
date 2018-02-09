@@ -39,7 +39,7 @@
       /*
        * Initialize the analytics variable to contain the metadata for the list of analytics.
        */
-      $http.get(Rt106_SERVER_URL + '/v1/analytics')
+      $http.get(utilityFns.rt106_server_url() + '/v1/analytics')
         .then(function(result) {
           for (var analytic in result.data) {
             var analytic_data = {
@@ -58,7 +58,7 @@
             // Closure to ensure the proper value of analyticName is available when the asynchronous response is recvd
             (function(analyticName) {
               // Get the parameters for each algorithm.
-              $http.get(Rt106_SERVER_URL + '/v1/analytics/' + analyticName + '/parameters')
+              $http.get(utilityFns.rt106_server_url() + '/v1/analytics/' + analyticName + '/parameters')
                 .then(function(result) {
                   responsesCount++;
                   var algoParamsObj = result.data;
@@ -121,7 +121,7 @@
                   }
                 });
               // Get the results for each algorithm.
-              $http.get(Rt106_SERVER_URL + '/v1/analytics/' + analyticName + '/results')
+              $http.get(utilityFns.rt106_server_url() + '/v1/analytics/' + analyticName + '/results')
                 .then(function(result) {
                   responsesCount++; // TODO:  Should this be initialized back to zero?
                   var algoResultsObj = result.data;
@@ -160,7 +160,7 @@
                   }
                 });
               // Get the result display format for each algorithm.
-              $http.get(Rt106_SERVER_URL + '/v1/analytics/' + analyticName + '/results/display')
+              $http.get(utilityFns.rt106_server_url() + '/v1/analytics/' + analyticName + '/results/display')
                 .then(function(result) {
                   responsesCount++;
                   var algoDisplayObj = result.data;
@@ -194,7 +194,7 @@
                 }
               );
               // Get the classification for each algorithm.
-              $http.get(Rt106_SERVER_URL + '/v1/analytics/' + analyticName + '/classification')
+              $http.get(utilityFns.rt106_server_url() + '/v1/analytics/' + analyticName + '/classification')
                 .then(function(result) {
                   responsesCount++;
                   var algoClass = result.data;

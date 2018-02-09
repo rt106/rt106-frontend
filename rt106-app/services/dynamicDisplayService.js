@@ -44,7 +44,7 @@
           $log.log('Series not cached. Loading ' + stackId);
           var series = accessPath
           if (imageFormat == "http:") { // DICOM images
-            return $http.get(Rt106_SERVER_URL + "/v1/datastore/series" + series + '/instances')
+            return $http.get(utilityFns.rt106_server_url() + "/v1/datastore/series" + series + '/instances')
               .catch(function(err) {
                 $log.error("Error getting the instances for a series: " + JSON.stringify(err));
                 alarmService.displayAlert('Error getting the instances for series');
@@ -55,11 +55,11 @@
                   $.each(response.data.paths, function(index, instance) {
                     var format  = imageFormat;
                     if (format === "http:") {
-                      if (Rt106_SERVER_URL.split(':')[0] === "https") {
+                      if (utilityFns.rt106_server_url().split(':')[0] === "https") {
                         format = "https:"
                       }
                     }
-                    var urlstring = format + Rt106_SERVER_URL.split(':').slice(1).join(':') + "/v1/datastore/instance" +  instance + '/DICOM';
+                    var urlstring = format + utilityFns.rt106_server_url().split(':').slice(1).join(':') + "/v1/datastore/instance" +  instance + '/DICOM';
                     imageIds.push(urlstring);
                   });
 

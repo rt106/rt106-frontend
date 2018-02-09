@@ -30,7 +30,7 @@
             // If the format ends with a colon, trim it off.
             suffixFormat = suffixFormat.substring(0, suffixFormat.length-1);
         }
-        var urlstring = imageFormat + Rt106_SERVER_URL.split(':').slice(1).join(':') + "/v1/datastore/instance" + accessString + '/' + suffixFormat;
+        var urlstring = imageFormat + this.rt106_server_url().split(':').slice(1).join(':') + "/v1/datastore/instance" + accessString + '/' + suffixFormat;
       return urlstring;
     }
 
@@ -94,6 +94,10 @@
             }
         }
 
+    }
+
+    this.rt106_server_url = function() {
+        return $location.protocol() + '://' + $location.host() + ':' + $location.port();
     }
 
 

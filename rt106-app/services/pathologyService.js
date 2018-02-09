@@ -21,7 +21,7 @@
       var channels = ["not ready"];
 
       /*
-      $http.get(Rt106_SERVER_URL + '/v1/datastore/pathology/slides')
+      $http.get(utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides')
         .then(function(result) {
           slides = result.data;
         }, function(err) {
@@ -30,7 +30,7 @@
         });
 
       var getRegions = function(slide) {
-        $http.get(Rt106_SERVER_URL + '/v1/datastore/pathology/slides/' + slide + '/regions')
+        $http.get(utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides/' + slide + '/regions')
           .then(function(result) {
             regions = result.data;
           }, function(err) {
@@ -40,7 +40,7 @@
       }
 
        var getChannels = function(slide, region) {
-       $http.get(Rt106_SERVER_URL + '/v1/datastore/pathology/slides/' + slide + '/regions/' + region + '/channels')
+       $http.get(utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides/' + slide + '/regions/' + region + '/channels')
        .then(function(result) {
        channels = result.data;
        //channels.unshift("DAPI");
@@ -63,7 +63,7 @@
 
       this.getSlideList = function() {
         var promise = new Promise(function(resolve, reject) {
-            var querystring = Rt106_SERVER_URL + '/v1/datastore/pathology/slides'
+            var querystring = utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides'
             $http.get(querystring)
                 .then(function(result) {
                     slides = result.data;
@@ -80,7 +80,7 @@
 
       this.getRegionList = function(slide) {
           var promise = new Promise(function(resolve, reject) {
-              var querystring = Rt106_SERVER_URL + '/v1/datastore/pathology/slides/' + slide + '/regions';
+              var querystring = utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides/' + slide + '/regions';
               $http.get(querystring)
                   .then(function(result) {
                       regions = result.data;
@@ -97,7 +97,7 @@
 
       this.getChannelList = function(slide, region) {
           var promise = new Promise(function(resolve, reject) {
-              var querystring = Rt106_SERVER_URL + '/v1/datastore/pathology/slides/' + slide + '/regions/' + region + '/channels';
+              var querystring = utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides/' + slide + '/regions/' + region + '/channels';
               $http.get(querystring)
                   .then(function(result) {
                       channels = result.data;
@@ -114,7 +114,7 @@
 
       this.getPrimaryImagePath = function(slide, region, channel) {
           var pathPromise = new Promise(function(resolve, reject) {
-              var querystring = Rt106_SERVER_URL + '/v1/datastore/pathology/slides/' + slide + '/regions/' + region + '/channels/' + channel + '/image';
+              var querystring = utilityFns.rt106_server_url() + '/v1/datastore/pathology/slides/' + slide + '/regions/' + region + '/channels/' + channel + '/image';
               $http.get(querystring)
                   .then(function(result) {
                       var path = result.data;
