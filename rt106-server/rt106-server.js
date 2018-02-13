@@ -10,7 +10,6 @@ const request      = require('request');
 const csv          = require('csvtojson');
 //const cors         = require('cors');
 
-
 const winston      = require('winston');
 
 // Rt 106 modules
@@ -20,6 +19,38 @@ const healthMgr    = require('./healthMgr');  // module for checking the health 
 
 var AMQPmgr      = null; // optional module for managing RabbitMQ queues.
 var SQSmgr       = null; // optional module for managing SQS queues
+
+/*
+ * Dynamically create the config.js file.
+ * If the environment variable Rt106_SERVER_HOST is defined, that is used in config.js.  Otherwise localhost is used.
+ * If the environment variable Rt106_APP_DIR is defined, that is the location where config.js needs to be.  Otherwise use rt106-app.
+ */
+var gulp = require('gulp');
+var ngConstant = require('gulp-ng-constant');
+var Rt106_SERVER_URL = 'http://localhost'; // Default value, may be changed below.
+if (process.env.Rt106_SERVER_HOST !== undefined) {
+    Rt106_SERVER_URL = 'http://' + process.env.Rt106_SERVER_HOST;
+}
+console.log("gulp setting Rt106_SERVER_URL to " + Rt106_SERVER_URL);
+var Rt106_APP_DIR = 'rt106-app';
+if (process.env.Rt106_SERVE_APP !== undefined) {
+    Rt106_APP_DIR = process.env.Rt106_SERVE_APP;
+}
+gulp.task('default', function() {
+    gulp.src(Rt106_APP_DIR + '/config.json')
+        .pipe(ngConstant({
+            name: 'rt106.config',
+            constants:
+                {
+                    Rt106_SERVER_URL: Rt106_SERVER_URL
+                }
+        }))
+        .pipe(gulp.dest(Rt106_APP_DIR));
+});
+gulp.start('default');
+/*
+ * End of dynamic creation of config.js.
+ */
 
 // Constants
 const PORT = 8106;
